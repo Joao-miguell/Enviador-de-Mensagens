@@ -425,6 +425,9 @@ class CourseOfferGUI:
         self.send_button = ttkb.Button(self.root, text="Enviar Mensagens", command=self.start_sending, bootstyle='success')
         self.send_button.pack(pady=10)
 
+        self.progress = ttkb.Progressbar(self.root, orient="horizontal", length=300, mode="determinate", bootstyle="success-striped")
+        self.progress.pack(pady=5)
+
         self.cancel_button = ttkb.Button(self.root, text="Interromper Envio", command=self.interromper_codigo, bootstyle='danger')
         self.cancel_button.pack(pady=5)
 
@@ -457,12 +460,9 @@ class CourseOfferGUI:
     def toggle_inputs(self):
         state = "disabled" if self.simple_mode_var.get() else "normal"
         
-        # Desabilita/Habilita os campos de texto
         self.schedule_entry.config(state=state)
         self.minage_entry.config(state=state)
         self.duration_entry.config(state=state)
-        
-        # Desabilita/Habilita os menus (INCLUSIVE O DE CURSO)
         self.menu_button.config(state=state)
         self.menu_group.config(state=state)
         self.menu_course.config(state=state)
@@ -564,18 +564,25 @@ class CourseOfferGUI:
         try:
             curso_de_envio = self.course_selected.get()
             
-            # Se for modo simples, variáveis ficam vazias
+            # Se for modo simples, variáveis ficam vazias e evitamos erro de conversão
             if self.simple_mode_var.get():
                 parceiro = ""
                 horario_do_curso = ""
                 data_de_duracao = ""
-                idademin = ""
+                idademin = 0 # Valor seguro para evitar erro de int() com string vazia
                 por_grupo = self.group_selected.get()
             else:
                 parceiro = self.partner_selected.get()
                 horario_do_curso = self.schedule_entry.get()
                 data_de_duracao = self.duration_entry.get()
-                idademin = int(self.minage_entry.get()) if self.minage_entry.get() else 0
+                
+                # Validação segura para idade mínima
+                entrada_idade = self.minage_entry.get()
+                if entrada_idade and entrada_idade.isdigit():
+                    idademin = int(entrada_idade)
+                else:
+                    idademin = 0
+                    
                 por_grupo = self.group_selected.get()   
 
             entrada_min = self.minrange_entry.get()
@@ -622,10 +629,8 @@ class CourseOfferGUI:
                 try:
                     linha_correta = x + 2
                     
-                    # Carrega o modelo da mensagem
                     modelo_mensagem = carregar_mensagem_padrao()
 
-                    # [LÓGICA NOVA] Se for Modo Simples, pula verificação de curso e envia direto
                     if self.simple_mode_var.get():
                         nome = alunos.loc[x, 'Nome Completo']
                         telefone = limpar_telefone(alunos.loc[x, "Whatsapp com DDD (somente números - sem espaço)"])
@@ -637,7 +642,6 @@ class CourseOfferGUI:
                         if telefone in self.numeros_enviados:
                             continue
 
-                        # No modo simples, usamos a mensagem crua, sem .format()
                         mensagem = modelo_mensagem 
                         
                         link_mensagem_whatsapp = f'https://web.whatsapp.com/send/?phone={telefone}&text={quote(mensagem)}'
@@ -655,7 +659,6 @@ class CourseOfferGUI:
                         save_last_line(linha_correta)
                     
                     else:
-                        # [LÓGICA PADRÃO] Com filtros de curso e variáveis
                         cursos = alunos.loc[x, "Dentre as opções qual curso gostaria de fazer?"]
                         if pd.isna(cursos):
                             continue
