@@ -1,0 +1,20 @@
+{
+    "Dev": [
+        "INTRODUÇÃO À ROBÓTICA",
+        "LÓGICA DE PROGRAMAÇÃO",
+        "DESENVOLVIMENTO WEB FRONT-END"
+    ],
+    "Marketing": [
+        "EMPREENDEDORISMO DIGITAL",
+        "INTRODUÇÃO A UTILIZAÇÃO DE IAS E CHATBOTS DE FORMA PRODUTIVA",
+        "ESTRATÉGIA DE NEGÓCIOS COM INTELIGÊNCIA ARTIFICIAL",
+        "APLICAÇÃO DE INTELIGÊNCIA ARTIFICIAL PARA NEGÓCIOS",
+        "LIDERANÇA E GESTÃO DE EQUIPES"
+    ],
+    "Design": [
+        "IMPRESSORA 3D"
+    ],
+    "Básico": [
+        "INTRODUÇÃO À INFORMÁTICA (WINDOWS, WORD, INTERNET)"
+    ]
+}
