@@ -336,7 +336,6 @@ class CourseOfferGUI:
         self.label_arquivo = ttk.Label(self.root, textvariable=self.caminho_arquivo, font=('Arial', 8), foreground="gray")
         self.label_arquivo.pack(pady=2)
 
-        # Checkbox para envio personalizado
         self.simple_mode_var = tk.BooleanVar(value=False)
         self.chk_simple_mode = ttkb.Checkbutton(
             root, 
@@ -564,19 +563,17 @@ class CourseOfferGUI:
         try:
             curso_de_envio = self.course_selected.get()
             
-            # Se for modo simples, variáveis ficam vazias e evitamos erro de conversão
             if self.simple_mode_var.get():
                 parceiro = ""
                 horario_do_curso = ""
                 data_de_duracao = ""
-                idademin = 0 # Valor seguro para evitar erro de int() com string vazia
+                idademin = 0 
                 por_grupo = self.group_selected.get()
             else:
                 parceiro = self.partner_selected.get()
                 horario_do_curso = self.schedule_entry.get()
                 data_de_duracao = self.duration_entry.get()
                 
-                # Validação segura para idade mínima
                 entrada_idade = self.minage_entry.get()
                 if entrada_idade and entrada_idade.isdigit():
                     idademin = int(entrada_idade)
